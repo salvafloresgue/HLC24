@@ -1,0 +1,20 @@
+FROM httpd
+ARG TZ
+ARG DWEB="/usr/local/apache2/htdocs"
+ARG DWEB1="/var/www/html"
+
+
+RUN apt-get update && apt-get install -y \
+    php \
+    libapache2-mod-php \
+    && rm -rf /var/lib/apt/lists/*
+
+#RUN sed -i 's/#LoadModule\ php7_module/'
+
+
+COPY ./web $DWEB
+RUN chown -R www-data ${DWEB}
+RUN chmod -R u+x ${DWEB}
+
+EXPOSE 80
+CMD ["httpd-foreground"]
